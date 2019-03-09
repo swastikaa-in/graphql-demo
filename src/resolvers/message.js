@@ -1,4 +1,5 @@
 import uuidv4 from 'uuid/v4';
+import { ForbiddenError } from 'apollo-server';
 
 export default {
   Query: {
@@ -12,13 +13,17 @@ export default {
 
   Mutation: {
     createMessage: (parent, { text }, { me, models }) => {
+         if (!me) {
+        throw new ForbiddenError('Not authenticated as user.');
+      }
+      console.log(me);
        const id = uuidv4();
       const message = {
         id,
         text,
         userId: me.id,
       };
-
+console.log(message);
       models.messages[id] = message;
       models.users[me.id].messageIds.push(id);
 
