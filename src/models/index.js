@@ -5,18 +5,28 @@ let users = {
     email:'gsamartian@cheerful.com',
     password:'test123$',
     messageIds: [1],
+    roles:[
+        'ADMIN'
+    ]
   },
   2: {
     id: '2',
     username: 'surya143',
     messageIds: [2],
     password:'test124$',
+    roles:[
+        'ADMIN',
+        'MEMBER'
+    ]
   },
   3:{
      id: '3',
      username: 'gajala123',
      messageIds: [3],
      password:'test125$',
+      roles:[
+        'MEMBER'
+    ]
   }
 };
 

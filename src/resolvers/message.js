@@ -1,32 +1,25 @@
 import uuidv4 from 'uuid/v4';
-import { ForbiddenError } from 'apollo-server';
+import { AuthenticationError } from 'apollo-server';
 
 export default {
     Query: {
         messages: (parent, args, { me, models }) => {
             if (!me) {
-                throw new ForbiddenError('Not authenticated as user.');
+                throw new AuthenticationError('Not authenticated as user.');
             }
-            console.log('me.id:' + me.id);
-
-            //return Object.values(models.messages);
             return Object.values(models.messages).filter(
                 message => message.userId === me.id,
             );
         },
         message: (parent, { id }, { me, models }) => {
             if (!me) {
-                throw new ForbiddenError('Not authenticated as user.');
+                throw new AuthenticationError('Not authenticated as user.');
             }
-            console.log('me.id:' + me.id);
-            console.log('me.username:' + me.username);
             const retValue = Object.values(models.messages).filter(
                 message => ((message.userId === me.id) && (message.id == id)),
             );
-            console.log(retValue[0]);
-
             return retValue[0];
-     
+
         },
     },
 
@@ -35,7 +28,6 @@ export default {
             if (!me) {
                 throw new ForbiddenError('Not authenticated as user.');
             }
-            console.log(me);
             const id = uuidv4();
             const message = {
                 id,
