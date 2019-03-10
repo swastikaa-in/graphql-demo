@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError, UserInputError } from 'apollo-server';
+import _ from 'lodash';
 
 const createToken = async (user, secret, expiresIn) => {
   const { id, email, username } = user;
@@ -10,41 +11,31 @@ const createToken = async (user, secret, expiresIn) => {
 
 export default {
     Mutation: {
-            signUp: async (
-            parent,
-            { username, email, password },
-            { models, secret },
-            ) => {
-                    const user = {
-                        'username':username,
-                        'email':email,
-                        'password':password
-                    };
-
-            return { token: createToken(user, secret, '30m') };
-    },
     signIn: async (
       parent,
       { login, password },
       { models, secret },
     ) => {
-       const user = {
-                        'username':login,
-                        'password':password
-                    };
+    const users=Object.values(models.users);
+    console.log('users:' + users);
+    const pos=_.findIndex(users, {'username':login,'password':password});
+    console.log('pos:' + pos);
 
-      if (login!=='sri420') {
+
+      if (pos==-1) {
         throw new UserInputError(
-          'No user found with this login credentials.',
+          'Invalid Username/Password. Access Denied',
         );
       }
-
-     // const isValid = await user.validatePassword(password);
-
-      if (password!=='test123$') {
-        throw new AuthenticationError('Invalid password.');
-      }
-
+      console.log('Sign-in Successful');
+   const luser=users[pos];
+    console.log('User Profile is:' + luser);
+     const user = {
+                        'username':luser.username,
+                        'email':luser.email,
+                        'id':luser.id
+                    };
+  console.log('user is:' + user);
       return { token: createToken(user, secret, '30m') };
     },
  // },

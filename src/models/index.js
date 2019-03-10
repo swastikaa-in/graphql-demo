@@ -1,19 +1,22 @@
 let users = {
   1: {
     id: '1',
-    username: 'Robin Wieruch',
+    username: 'sri420',
+    email:'gsamartian@cheerful.com',
+    password:'test123$',
     messageIds: [1],
   },
   2: {
     id: '2',
-    username: 'Dave Davids',
+    username: 'surya143',
     messageIds: [2],
+    password:'test124$',
   },
   3:{
-      id: '60e64841-77a7-4145-b56d-5acf53d95dea',
-    username: 'sri420',
-    messageIds: [2],
-
+     id: '3',
+     username: 'gajala123',
+     messageIds: [3],
+     password:'test125$',
   }
 };
 
@@ -28,6 +31,11 @@ let messages = {
     text: 'By World',
     userId: '2',
   },
+  3: {
+    id: '3',
+    text: 'WTF',
+    userId: '3'
+  }
 };
 
 export default {
