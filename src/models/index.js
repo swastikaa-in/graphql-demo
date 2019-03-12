@@ -13,6 +13,7 @@ let users = {
     id: '2',
     username: 'surya143',
     messageIds: [2],
+	email:'surya@cheerful.com',
     password:'test124$',
     roles:[
         'ADMIN',
@@ -23,6 +24,7 @@ let users = {
      id: '3',
      username: 'gajala123',
      messageIds: [3],
+	 email:'gajala@cheerful.com',
      password:'test125$',
       roles:[
         'MEMBER'

@@ -33,20 +33,20 @@ export default {
             if (!me) {
                 throw new AuthenticationError('Not authenticated as user(401).');
             }
-            const curRoles = me.roles;
+            /*const curRoles = me.roles;
             if (curRoles.indexOf('ADMIN') == -1) {
                 throw new ForbiddenError('Access Denied(403).');
-            }
+            }*/
             return Object.values(models.users);
         },
         user: (parent, { id }, { models, me }) => {
             if (!me) {
                 throw new AuthenticationError('Not authenticated as user(401).');
             }
-            const curRoles = me.roles;
+            /*const curRoles = me.roles;
             if (curRoles.indexOf('ADMIN') == -1) {
                 throw new ForbiddenError('Access Denied(403).');
-            }
+            }*/
             return models.users[id];
         },
         me: (parent, args, { me }) => {

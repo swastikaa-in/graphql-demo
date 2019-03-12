@@ -3,22 +3,27 @@ import { AuthenticationError } from 'apollo-server';
 
 export default {
     Query: {
-        messages: (parent, args, { me, models }) => {
+        messages: (parent, args, { me,models } ) => {
             if (!me) {
                 throw new AuthenticationError('Not authenticated as user.');
             }
             return Object.values(models.messages).filter(
                 message => message.userId === me.id,
             );
+			
+			
         },
-        message: (parent, { id }, { me, models }) => {
+        message: (parent, { id },  { me, models }) => {
             if (!me) {
                 throw new AuthenticationError('Not authenticated as user.');
             }
-            const retValue = Object.values(models.messages).filter(
+			const retValue = Object.values(models.messages).filter(
                 message => ((message.userId === me.id) && (message.id == id)),
             );
             return retValue[0];
+			
+				
+            
 
         },
     },
