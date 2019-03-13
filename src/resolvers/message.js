@@ -1,12 +1,15 @@
 import uuidv4 from 'uuid/v4';
-import { AuthenticationError } from 'apollo-server';
+import { AuthenticationError ,ForbiddenError
+} from 'apollo-server';
 
 export default {
     Query: {
         messages: (parent, args, { me,models } ) => {
-            if (!me) {
-                throw new AuthenticationError('Not authenticated as user.');
-            }
+            /*if (!me) {
+                throw new AuthenticationError('Request Not Authenticated. Provide Valid Token.');
+            }*/
+
+            console.log('me.id:' + me.id);
             return Object.values(models.messages).filter(
                 message => message.userId === me.id,
             );
@@ -14,12 +17,17 @@ export default {
 			
         },
         message: (parent, { id },  { me, models }) => {
-            if (!me) {
-                throw new AuthenticationError('Not authenticated as user.');
-            }
+            /*if (!me) {
+                throw new AuthenticationError('Request Not Authenticated. Provide Valid Token.');
+            }*/
 			const retValue = Object.values(models.messages).filter(
                 message => ((message.userId === me.id) && (message.id == id)),
             );
+
+            return retValue[0];
+            /*if(!retValue[0]){
+                throw new ForbiddenError('Access Denied for Resource - 403');
+            }*/
             return retValue[0];
 			
 				

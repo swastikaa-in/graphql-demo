@@ -32,7 +32,10 @@
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",
-    "nodemon": "^1.18.10"
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10",
+    "request": "^2.88.0"
   },
   "bugs": {
     "url": "https://github.com/swastikaa-in/graphql-demo/issues"

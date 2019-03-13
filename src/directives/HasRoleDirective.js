@@ -1,10 +1,10 @@
 import {  ForbiddenError } from 'apollo-server-express';
-import { AccessDeniedError } from '../AccessDeniedError';
+import { AccessDeniedError } from '../errors/AccessDeniedError';
 
 const { SchemaDirectiveVisitor } = require('apollo-server-express')
     const { defaultFieldResolver } = require('graphql')
 
-    class AuthorizationDirective extends SchemaDirectiveVisitor {
+    class HasRoleDirective extends SchemaDirectiveVisitor {
   visitObject(type) {
     this.ensureFieldsWrapped(type);
     type._requiredAuthRole = this.args.role;
@@ -34,19 +34,20 @@ const { SchemaDirectiveVisitor } = require('apollo-server-express')
           field._requiredAuthRole ||
           objectType._requiredAuthRole;
 
-		// console.log('***requiredRole :' + requiredRole);
+		 console.log('***requiredRole :' + requiredRole);
 		 
         if (! requiredRole) {
-     	  //console.log('**Not Required Role');
+     	  console.log('**Not Required Role');
           return resolve.apply(this, args);
         }
 
         const context = args[2];
         const userRoles = context.me.roles;
-        //console.log('**userRole is:' + userRoles);
+        console.log('**userRole is:' + userRoles);
 
 		if (userRoles.indexOf(requiredRole) == -1) {
 				//return null;
+        console.log('Does Not Have Required Role');
               throw new ForbiddenError('Access Denied- 403');
             }
 		
@@ -56,4 +57,4 @@ const { SchemaDirectiveVisitor } = require('apollo-server-express')
   }
 }
 
-    module.exports = AuthorizationDirective
+    module.exports = HasRoleDirective

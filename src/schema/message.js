@@ -1,11 +1,11 @@
 import { gql } from 'apollo-server-express';
 
 export default gql`
-
+  directive @hasRole(role:String) on FIELD | FIELD_DEFINITION
 
   extend type Query {
-    messages: [Message!]!
-    message(id: ID!): Message
+    messages: [Message!]! 
+    message(id: ID!): Message 
   }
 
   extend type Mutation {
@@ -14,8 +14,8 @@ export default gql`
   }
 
   type Message {
-    id: ID!
-    text: String! 
-    user: User!
+    id: ID! @hasRole(role:"ADMIN")
+    text: String!  @hasRole(role:"MEMBER")
+    user: User!  @hasRole(role:"ADMIN")
   }
 `;

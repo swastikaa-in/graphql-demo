@@ -1,18 +1,18 @@
 import { gql } from 'apollo-server-express';
 
 export default gql`
-  directive @auth(role: String) on FIELD | FIELD_DEFINITION
-  
+
+
   
   extend type Query {
-    users: [User!] 
-    user(id: ID!): User 
-    me: User
+    users: [User!]  @hasRole(role:"ADMIN")
+    user(id: ID!): User  @hasRole(role:"ADMIN")
+    me: User 
   }
 extend type Mutation {
     signUp(
       username: String!
-      email: String!
+      email: String! 
       password: String!
     ): Token!
     signIn(login: String!, password: String!): Token!
@@ -24,7 +24,7 @@ extend type Mutation {
   type User {
     id: ID!
     username: String! 
-    email: String @auth(role: "ADMIN")
+    email: String @hasRole(role:"MEMBER")
     messages: [Message!] 
   }
 `;

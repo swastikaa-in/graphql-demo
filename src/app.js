@@ -4,8 +4,8 @@ import express from 'express';
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import cors from 'cors';
 import 'dotenv/config';
-//const IsAdminDirective = require('./directives/isAdmin')
-const AuthorizationDirective = require('./directives/AuthorizationDirective')
+const AuthenticatedDirective = require('./directives/AuthenticatedDirective')
+const HasRoleDirective = require('./directives/HasRoleDirective')
 
 
 //Import Application Specific Schemas,Resolvers and Models
@@ -23,48 +23,33 @@ const getMe = async req => {
              return await jwt.verify(token, process.env.JWT_SECRET);
         } catch (e) {
             throw new AuthenticationError(
-                'Your session expired. Sign in again.',
+                'Token Invalid or Expired. Please Pass Valid Token.',
             );
         }
+    }else{
+         throw new AuthenticationError('Request Not Authenticated. Provide Valid Token!')
     }
 };
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-	schemaDirectives: {
-		auth: AuthorizationDirective
-     },
+     schemaDirectives: {
+     isAuthenticated: AuthenticatedDirective,
+     hasRole:HasRoleDirective
+    // custom name for @hasRole
+    //hasRole: customAuth().hasRole,
+  },
+
     context: async ({ req }) => {
         const me = await getMe(req);
+        console.log(' in context me is:' + me);
         return {
             models,
             me,
-            secret: process.env.SECRET,
+            secret: process.env.SECRET
         };
-    },
-    /*formatError: error => {
-        console.log(error);
-        //delete error.locations;
-        showLocations: false,
-        delete error.extensions.exception;
-        
-        return error;
-    }*/
-    formatError(err) {
-        console.log(err);
-        return {
-            code:err.extensions.code,
-            message:err.message + " For Path: " + err.path,
-            //developerMessage: err.locations,  
-            moreInfo:'testing',
-            timestamp:err.message.timestamp
-         // message: err.message,
-         // path: err.path,
-         // code: err.originalError && err.originalError.code // <-- The trick is here
-         // locations: err.locations,
-         // path: err.path
-        }
-      }
+    }
+  
     
 });
 
@@ -74,5 +59,5 @@ app.use(cors());
 
 
 app.listen({ port: 8000 }, () => {
-    console.log('Apollo Server on http://localhost:8000/graphql');
+    console.log('Apollo Server on http://localhost:8000');
 });
